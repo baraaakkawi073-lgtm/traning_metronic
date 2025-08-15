@@ -3,6 +3,7 @@ from .models import Product
 from .forms import ProductForm
 
 def index(request):
+
     return render(request, "index.html")
 
 def products(request):
