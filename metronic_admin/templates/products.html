@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block title %}Products{% endblock %}
+
+{% block content %}
+<div class="card">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <h3 class="card-title">Products</h3>
+    <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#createModal">Create</button>
+  </div>
+
+  <div class="card-body">
+    <table class="table table-row-dashed align-middle gs-0 gy-4">
+      <thead>
+        <tr class="fw-bold text-muted">
+          <th>Name</th>
+          <th>Company</th>
+          <th>Progress</th>
+          <th class="text-end">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for product in products %}
+        <tr>
+          <td class="text-dark fw-bold">{{ product.name }}</td>
+          <td>{{ product.company }}</td>
+          <td>
+            <div class="progress" style="height:6px;">
+              <div class="progress-bar bg-info" style="width:{{ product.progress }}%"></div>
+            </div>
+          </td>
+          <td class="text-end">
+            <a href="{% url 'edit_product' product.id %}" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm">
+              <i class="bi bi-pencil"></i>
+            </a>
+            <a href="{% url 'delete_product' product.id %}" class="btn btn-icon btn-bg-light btn-active-color-danger btn-sm"
+               onclick="return confirm('Are you sure?')">
+              <i class="bi bi-trash"></i>
+            </a>
+          </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="4" class="text-center">No products found</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ✅ Create Modal -->
+<div class="modal fade" id="createModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form method="POST" action="{% url 'create_product' %}">
+        {% csrf_token %}
+        <div class="modal-header">
+          <h5 class="modal-title">Add Product</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <input name="name" type="text" class="form-control mb-2" placeholder="Name" required>
+          <input name="company" type="text" class="form-control mb-2" placeholder="Company" required>
+          <input name="progress" type="number" class="form-control mb-2" placeholder="Progress %" required>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+
